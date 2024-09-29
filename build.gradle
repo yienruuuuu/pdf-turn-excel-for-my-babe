@@ -1,17 +1,43 @@
 plugins {
+    id 'org.springframework.boot' version '2.7.9'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
+    id 'application'
 }
 
 group = 'org.example'
-version = '1.0-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'org.example.Main'
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // Spring Boot 核心依賴
+    implementation 'org.springframework.boot:spring-boot-starter'
+    // Spring Boot Web 依賴 (若你有用到 Web 功能，可以選擇性添加)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 這裡是一些可能用到的其他依賴，比如 JSON 處理、HTTP 請求等 (根據實際需要添加)
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    // jna
+    implementation 'net.java.dev.jna:jna:5.13.0'
+    implementation 'net.java.dev.jna:jna-platform:5.13.0'
+    // tabula
+    implementation 'technology.tabula:tabula:1.0.5'
+    //easyExcel
+    implementation group: 'com.alibaba', name: 'easyexcel', version: '3.1.1'
+    // apache poi
+    implementation group: 'org.apache.poi', name: 'poi', version: '5.2.3'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
 }
 
 test {

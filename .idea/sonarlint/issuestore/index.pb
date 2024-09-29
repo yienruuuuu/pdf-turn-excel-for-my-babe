@@ -26,3 +26,5 @@ X
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
 Å
 Q.idea/sonarlint/securityhotspotstore/0/b/0ba1b9c7a4878802f938e331cc2d8a042087ec6b,a\b\abe25e851ee828e40a94fcb1c1be6f78ff7a04cf
+]
+-src/main/java/org/example/tool/PDFReader.java,0\d\0de6b3bb025111ac7076f738bdee91a3e72f4325
