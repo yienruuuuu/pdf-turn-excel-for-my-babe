@@ -176,44 +176,57 @@ public class PDFReader {
     // 新增處理方法，用於篩選出最小的R和L
     public List<Map<String, String>> processCurves(List<Map<String, String>> tableData) {
         Map<String, Map<String, String>> curveGroups = new HashMap<>(); // 用來存放最小的 L 和 R
+        boolean containsSpecialCases = false;
 
+        // 遍歷所有的 rowData
         for (Map<String, String> rowData : tableData) {
             String curve = rowData.get("Curve");
             if (!curve.isEmpty()) {
-                String group = curve.startsWith("105 L") ? "L" : curve.startsWith("105 R") ? "R" : null;
+                // 檢查是否包含 "105a" 或 "105b"
+                if (curve.contains("105a") || curve.contains("105b")) {
+                    containsSpecialCases = true; // 出現 105a 或 105b，標記
+                }
+
+                // 確定這行數據屬於 L 還是 R
+                String group = curve.contains("L") ? "L" : curve.contains("R") ? "R" : null;
 
                 if (group != null) {
-                    String currentKey = curve.replaceAll("[^0-9]", "");
-                    int currentIndex = currentKey.isEmpty() ? 0 : Integer.parseInt(currentKey);
-
+                    // 檢查數據是否有效
                     boolean hasValidData = !(rowData.get("N1").isEmpty() && rowData.get("P1").isEmpty() && rowData.get("N1-P1 Amp").isEmpty());
 
                     if (!curveGroups.containsKey(group)) {
+                        // 如果尚無數據加入此組，先放入最小的數據
                         if (!hasValidData) {
                             rowData.put("N1", "NR");
                             rowData.put("P1", "NR");
                             rowData.put("N1-P1 Amp", "NR");
                         }
-                        curveGroups.put(group, rowData);
+                        curveGroups.put(group, rowData); // 添加到分組中
                     } else {
+                        // 已經有數據，檢查當前 curve 是否有效
                         String existingCurve = curveGroups.get(group).get("Curve");
-                        String existingKey = existingCurve.replaceAll("[^0-9]", "");
-                        int existingIndex = existingKey.isEmpty() ? 0 : Integer.parseInt(existingKey);
-
-                        if (currentIndex < existingIndex) {
-                            if (!hasValidData) {
-                                rowData.put("N1", "NR");
-                                rowData.put("P1", "NR");
-                                rowData.put("N1-P1 Amp", "NR");
+                        if (!existingCurve.contains("a") && !existingCurve.contains("b")) {
+                            // 只有當前是有效數據時才替換
+                            if (hasValidData) {
+                                curveGroups.put(group, rowData);
                             }
-                            curveGroups.put(group, rowData);
                         }
                     }
                 }
             }
         }
 
+        // 如果出現 "105a" 或 "105b"，將所有數據替換為 "ERROR"
+        if (containsSpecialCases) {
+            for (String group : curveGroups.keySet()) {
+                Map<String, String> rowData = curveGroups.get(group);
+                rowData.put("N1", "ERROR");
+                rowData.put("P1", "ERROR");
+                rowData.put("N1-P1 Amp", "ERROR");
+            }
+        }
+
+        // 返回最終結果
         return new ArrayList<>(curveGroups.values());
     }
-
 }
