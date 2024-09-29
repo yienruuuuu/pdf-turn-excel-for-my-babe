@@ -56,7 +56,7 @@ public class PDFToExcelConverter {
             if (rData != null) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(firstBlockData.get("ID no"));
-                row.createCell(1).setCellValue(firstBlockData.get("Sex"));
+                row.createCell(1).setCellValue(firstBlockData.get("Sex").contains("F") ? "2" : "1");
                 row.createCell(2).setCellValue(firstBlockData.get("Age"));
                 row.createCell(3).setCellValue("1");  // 右耳
                 row.createCell(4).setCellValue(rData.getOrDefault("N1", "NR"));
@@ -68,7 +68,7 @@ public class PDFToExcelConverter {
             if (lData != null) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(firstBlockData.get("ID no"));
-                row.createCell(1).setCellValue(firstBlockData.get("Sex"));
+                row.createCell(1).setCellValue(firstBlockData.get("Sex").contains("F") ? "2" : "1");
                 row.createCell(2).setCellValue(firstBlockData.get("Age"));
                 row.createCell(3).setCellValue("2");  // 左耳
                 row.createCell(4).setCellValue(lData.getOrDefault("N1", "NR"));
