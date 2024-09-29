@@ -77,9 +77,9 @@ public class PDFReader {
                         if (cleanRow.contains(field) && !extractedData.containsKey(field)) {
                             // 提取欄位名之後到下一個欄位之前的內容
                             String value = extractValue(cleanRow, field, fields);
-                            //TODO 去除資料的冒號、空白字元
+                            // 去除資料的冒號、空白字元
                             if (!value.isEmpty()) {
-                                extractedData.put(field, value.trim());  // 將數據儲存到 Map 中
+                                extractedData.put(field, value.replace(":", "").trim());  // 移除冒號並去掉空白
                             } else {
                                 extractedData.put(field, "N/A");  // 如果沒有內容則填 N/A
                             }
